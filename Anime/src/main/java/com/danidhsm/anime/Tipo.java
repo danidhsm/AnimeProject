@@ -1,8 +1,5 @@
 package com.danidhsm.anime;
 
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.Observable;
 
 
