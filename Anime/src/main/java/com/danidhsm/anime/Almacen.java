@@ -31,6 +31,7 @@ public class Almacen extends Observable implements Observer {
         changed();
     }
 
+
     public void add(Tipo serie){
         series.add(serie);
         serie.addObserver(this);
