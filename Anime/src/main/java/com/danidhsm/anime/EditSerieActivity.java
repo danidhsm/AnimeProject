@@ -2,18 +2,25 @@ package com.danidhsm.anime;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  * Created by danidhsm on 3/06/13.
  */
 public class EditSerieActivity extends Activity {
 
+    private ImageView editImagen;
     private EditText editNombre;
     private EditText editCurrentEpisode;
     private EditText editEpisodes;
@@ -25,6 +32,7 @@ public class EditSerieActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_serie);
 
+        editImagen = (ImageView) findViewById(R.id.editImagen);
         editNombre = (EditText)findViewById(R.id.editNombre);
         editCurrentEpisode = (EditText)findViewById(R.id.editCurrentEpisode);
         editEpisodes = (EditText)findViewById(R.id.editEpisodes);
@@ -39,6 +47,8 @@ public class EditSerieActivity extends Activity {
         Bundle reicieveParams = getIntent().getExtras();
 
         if (reicieveParams != null) {
+
+            //byte[] image = reicieveParams.getByteArray("image");
             id= reicieveParams.getInt("id");
             String nombre = reicieveParams.getString("nombre");
             int currentEpisode = reicieveParams.getInt("currentEpisode");
@@ -46,6 +56,8 @@ public class EditSerieActivity extends Activity {
             int anio = reicieveParams.getInt("anio");
             String estado = reicieveParams.getString("estado");
 
+
+            //editImagen.setImageBitmap(BitmapFactory.decodeByteArray(image,0,image.length));
             editNombre.setText(nombre);
             editCurrentEpisode.setText(Integer.toString(currentEpisode));
             editEpisodes.setText(Integer.toString(episodes));

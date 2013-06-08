@@ -3,6 +3,10 @@ package com.danidhsm.anime;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -62,11 +67,20 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
             viewHolder.episodes         = (TextView) rowView.findViewById(R.id.episodes);
             viewHolder.add              = (Button) rowView.findViewById(R.id.plus);
 
-
             rowView.setTag(viewHolder);
         }
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
+
+
+        if(serie.getUrlImage()!=null && serie.getImageBitmap()==null){
+            new DownloadImageTask(serie).execute(serie.getUrlImage());
+            //Log.e("row","se ha iniciado el hilo de la imagen");
+        }else if (serie.getUrlImage()==null){
+            holder.imagen.setImageResource(R.drawable.ic_launcher);
+        } else {
+            holder.imagen.setImageBitmap(serie.getImageBitmap());
+        }
 
         holder.nombre.setText(serie.getTitle());
         holder.nombre.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +89,7 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
                 Intent intent = new Intent(context, EditSerieActivity.class);
 
                 // damos valor al parámetro a pasar
+                //intent.putExtra("image",serie.getImageBitmap().getNinePatchChunk());
                 intent.putExtra("id",serie.getId());
                 intent.putExtra("nombre", serie.getTitle());
                 intent.putExtra("currentEpisode", serie.getCurrentEpisode());
@@ -97,14 +112,34 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
             }
         });
 
-        // Change the icon for Windows and iPhone
-        /*String s = values[position];
-        if (s.startsWith("iPhone")) {
-            imageView.setImageResource(R.drawable.no);
-        } else {
-            imageView.setImageResource(R.drawable.ok);
-        }*/
-
         return rowView;
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        Tipo serie;
+
+        public DownloadImageTask(Tipo serie) {
+            this.serie = serie;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Log.e("",urldisplay);
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            serie.setImageBitmap(result);
+            AnimeRowAdapter.this.notifyDataSetChanged();
+            Log.e("","metida");
+        }
     }
 }

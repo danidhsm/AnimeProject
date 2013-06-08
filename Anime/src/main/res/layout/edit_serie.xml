@@ -116,4 +116,9 @@
             android:layout_alignBottom="@+id/guardar"
             android:layout_toLeftOf="@+id/guardar"/>
 
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editImagen"/>
+
 </RelativeLayout>

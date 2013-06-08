@@ -18,12 +18,13 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f06001e;
+        public static final int action_settings=0x7f06001f;
         public static final int currentEpisode=0x7f06000d;
         public static final int editAnio=0x7f06001b;
         public static final int editCurrentEpisode=0x7f060015;
         public static final int editEpisodes=0x7f060017;
         public static final int editEstado=0x7f060019;
+        public static final int editImagen=0x7f06001e;
         public static final int editNombre=0x7f060013;
         public static final int eliminar=0x7f06001d;
         public static final int episodes=0x7f060010;

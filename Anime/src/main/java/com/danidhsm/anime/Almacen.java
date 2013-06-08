@@ -1,5 +1,7 @@
 package com.danidhsm.anime;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -63,6 +65,7 @@ public class Almacen extends Observable implements Observer {
                     cacheViendo.add(serie);
                 }
             }
+            this.dateSort();
             changedViendo=false;
         }
 
@@ -130,6 +133,19 @@ public class Almacen extends Observable implements Observer {
             } else if(tipo.getAnio()==tipo2.getAnio()){
                 return 0;
             } else return -1;
+        }
+    }
+
+    public void dateSort(){
+        Collections.sort(this.cacheViendo, new DateComparator());
+    }
+
+    class DateComparator implements Comparator<Tipo>{
+
+        @Override
+        public int compare(Tipo tipo, Tipo tipo2) {
+            //Log.e("",tipo.getTitle()+" "+tipo.getDate().toString()+" "+tipo2.getDate().toString()+" => "+tipo.getDate().compareTo(tipo2.getDate())+"");
+            return tipo.getDate().compareTo(tipo2.getDate())*-1;
         }
     }
 

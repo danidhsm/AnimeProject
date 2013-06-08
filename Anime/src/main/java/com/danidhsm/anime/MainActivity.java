@@ -117,15 +117,15 @@ public class MainActivity extends Activity implements Observer {
 
         AnimeRowAdapter adapterViendo = ((AnimeRowAdapter)listviewViendo.getAdapter());
         adapterViendo.notifyDataSetChanged();
-        listviewViendo.setSelection(listviewViendo.getCount());
+        //listviewViendo.setSelection(listviewViendo.getCount());
 
         AnimeRowAdapter adapterQuiero_ver = ((AnimeRowAdapter)listviewQuiero_ver.getAdapter());
         adapterQuiero_ver.notifyDataSetChanged();
-        listviewQuiero_ver.setSelection(listviewQuiero_ver.getCount());
+        //listviewQuiero_ver.setSelection(listviewQuiero_ver.getCount());
 
         AnimeRowAdapter adapterTodas = ((AnimeRowAdapter)listviewTodas.getAdapter());
         adapterTodas.notifyDataSetChanged();
-        listviewTodas.setSelection(listviewTodas.getCount());
+        //listviewTodas.setSelection(listviewTodas.getCount());
     }
 
 
