@@ -6,7 +6,7 @@
                 android:background="#000000">
 
     <ImageView
-            android:layout_width="80dp"
+            android:layout_width="70dp"
             android:layout_height="80dp"
             android:id="@+id/imageSerie"
             android:src="@drawable/ic_launcher"
@@ -21,9 +21,9 @@
             android:id="@+id/horizontalScrollView"
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imageSerie"
             android:layout_toLeftOf="@+id/currentEpisode"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/imageSerie">
+            android:layout_marginRight="5dp">
 
         <TextView
                 android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
                 android:text="Nombre de Serie mazo largo o no"
                 android:id="@+id/nameSerie"
                 android:textColor="#ffffff"
-                android:textSize="18dp"
+                android:textSize="16sp"
                 />
     </HorizontalScrollView>
 
@@ -43,7 +43,11 @@
             android:id="@+id/currentEpisode"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/slash"
-            android:textColor="#ffffff"/>
+            android:textColor="#ff1605"
+            android:textSize="18sp"
+            android:layout_alignTop="@+id/horizontalScrollView"
+            android:layout_alignBottom="@+id/horizontalScrollView"
+            android:gravity="center_vertical"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -57,7 +61,10 @@
             android:layout_alignParentTop="false"
             android:layout_alignParentBottom="false"
             android:layout_centerVertical="true"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_alignTop="@+id/horizontalScrollView"
+            android:gravity="center_vertical"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -67,16 +74,19 @@
             android:id="@+id/episodes"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/plus"
-            android:layout_marginRight="10dp"
             android:layout_alignBottom="@+id/horizontalScrollView"
-            android:textColor="#ffffff"/>
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_alignTop="@+id/horizontalScrollView"
+            android:gravity="center_vertical"/>
 
     <Button
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/plus"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:background="@android:drawable/ic_input_add"/>
 
 </RelativeLayout>

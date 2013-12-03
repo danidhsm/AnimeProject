@@ -10,6 +10,17 @@
             android:text="Añadir"
             android:id="@+id/nuevaSerie"/>
 
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/actualizar"
+            android:background="#000000"
+            android:src="@android:drawable/stat_notify_sync"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/nuevaSerie"
+            android:layout_alignBottom="@+id/nuevaSerie"
+            android:layout_toLeftOf="@+id/exportar"/>
+
     <TabHost
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -22,6 +33,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical">
+
+            <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/generalLoad"/>
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ESTADO"
+                    android:id="@+id/estado"
+                    android:layout_gravity="center"/>
 
             <TabWidget
                     android:id="@android:id/tabs"
@@ -44,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/listaViendo"
                             android:layout_below="@+id/imageView"
-                            android:layout_alignLeft="@+id/textView"
+                            android:layout_alignLeft="@+id/estado"
                             />
                 </LinearLayout>
 
@@ -73,5 +97,17 @@
         </LinearLayout>
     </TabHost>
 
+    <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/exportar"
+            android:background="#000000"
+            android:src="@android:drawable/stat_notify_sdcard"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/tabHost"
+            android:layout_marginLeft="2dp"/>
+
 
 </RelativeLayout>
+<!-- From: file:/C:/Users/danidhsm/AndroidStudioProjects/AnimeProject/Anime/src/main/res/layout/activity_main.xml -->
