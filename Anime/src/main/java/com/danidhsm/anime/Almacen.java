@@ -108,6 +108,7 @@ public class Almacen extends Observable implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
+        changed();
         setChanged();
         notifyObservers();
     }

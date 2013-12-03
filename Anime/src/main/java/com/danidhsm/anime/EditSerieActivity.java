@@ -41,6 +41,7 @@ public class EditSerieActivity extends Activity {
         Button guardar = (Button)findViewById(R.id.guardar);
         Button eliminar = (Button)findViewById(R.id.eliminar);
         editEstado.setAdapter(new ArrayAdapter<Estado>(this, android.R.layout.simple_spinner_dropdown_item, Estado.values()));
+        editEstado.setSelection(Estado.QUIERO_VER.ordinal());
 
 
 
@@ -48,7 +49,7 @@ public class EditSerieActivity extends Activity {
 
         if (reicieveParams != null) {
 
-            //byte[] image = reicieveParams.getByteArray("image");
+            Bitmap image = (Bitmap) reicieveParams.get("image");
             id= reicieveParams.getInt("id");
             String nombre = reicieveParams.getString("nombre");
             int currentEpisode = reicieveParams.getInt("currentEpisode");
@@ -57,7 +58,7 @@ public class EditSerieActivity extends Activity {
             String estado = reicieveParams.getString("estado");
 
 
-            //editImagen.setImageBitmap(BitmapFactory.decodeByteArray(image,0,image.length));
+            editImagen.setImageBitmap(image);
             editNombre.setText(nombre);
             editCurrentEpisode.setText(Integer.toString(currentEpisode));
             editEpisodes.setText(Integer.toString(episodes));

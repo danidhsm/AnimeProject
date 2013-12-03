@@ -62,7 +62,7 @@ public class Tipo extends Observable {
     }
 
     public void setUpdate(String date){
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         try {
             this.date = formatoDelTexto.parse(date);
         } catch (ParseException ex) {
@@ -144,11 +144,14 @@ public class Tipo extends Observable {
 	}
 	
 	public String toString(){
-		return this.title+"["+this.currentEpisode+"/"+((this.episodes==0)?"??":this.episodes)+"]"+" "+this.anio+" "+this.estado.name()+" "+this.generos+" "+new SimpleDateFormat("dd-MM-yyyy").format(this.date)+" "+this.day;
+		return this.title+"["+this.currentEpisode+"/"+((this.episodes==0)?"??":this.episodes)+"]"+" "+this.anio+" "+this.estado.name()+" "+this.generos+" "+new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(this.date)+" "+this.day;
 	}
 
 	public void addEpisode(){
 		this.currentEpisode++;
+        if(this.currentEpisode==this.episodes){
+            this.estado=Estado.ACABADA;
+        }
         this.setUpdate(new Date());
 	}
 
