@@ -5,9 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -34,7 +38,7 @@ import java.util.Observer;
 
 public class MainActivity extends Activity implements Observer {
 
-    private Almacen almacen;
+    Almacen almacen;
     private ListView listviewViendo;
     private ListView listviewQuiero_ver;
     private ListView listviewTodas;
@@ -42,6 +46,7 @@ public class MainActivity extends Activity implements Observer {
     AnimeRowAdapter adapterViendo;
     AnimeRowAdapter adapterQuiero_ver;
     AnimeRowAdapter adapterTodas;
+    TextView buscar;
 
     /*@Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -213,6 +218,19 @@ public class MainActivity extends Activity implements Observer {
         }
     }
 
+    public boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if(netInfo!=null && netInfo.isConnected()){
+            return true;
+        }
+
+        //TextView estado= (TextView)findViewById(R.id.estado);
+        //estado.setText("No hay conexion a Internet");
+        return false;
+
+    }
+
     public void SDexport(){
 
         new ExportSD().execute();
@@ -234,10 +252,17 @@ public class MainActivity extends Activity implements Observer {
 
         @Override
         protected void onPreExecute() {
+            String online;
+            if(isOnline()){
+                online="con Internet";
+            } else {
+                online="sin Internet";
+            }
+
             estado = (TextView) findViewById(R.id.estado);
             estado.setText("Leyendo Fichero...");
             pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Leyendo fichero ...");
+            pDialog.setMessage("Leyendo fichero ... "+ online);
             pDialog.setCancelable(true);
             pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             pDialog.show();
@@ -322,6 +347,44 @@ public class MainActivity extends Activity implements Observer {
                 }
             });
 
+            buscar = (TextView) findViewById(R.id.buscar);
+            buscar.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                    int textlength = buscar.getText().length();
+                    ArrayList<Tipo> filtro = new ArrayList<Tipo>();
+                    ArrayList<Tipo> todas;
+
+                    todas=MainActivity.this.almacen.getAll();
+
+
+
+
+                    for (int j = 0; j < todas.size(); j++)
+                    {
+                        if (textlength <= todas.get(j).getTitle().length())
+                        {
+                            if (buscar.getText().toString().equalsIgnoreCase((String) todas.get(j).getTitle().subSequence(0, textlength)))
+                            {
+                                filtro.add(todas.get(j));
+                            }
+                        }
+                    }
+
+                    listviewTodas.setAdapter(new AnimeRowAdapter(MainActivity.this,filtro));
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
             ImageButton export = (ImageButton) findViewById(R.id.exportar);
             export.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -343,7 +406,6 @@ public class MainActivity extends Activity implements Observer {
             Toast toast = Toast.makeText(MainActivity.this, "se han leido "+almacen.getAll().size()+" series", Toast.LENGTH_SHORT);
             toast.show();
         }
-
     }
 
     class ExportSD extends AsyncTask<Void, Integer, Void> {

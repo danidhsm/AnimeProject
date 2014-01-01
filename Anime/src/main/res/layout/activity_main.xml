@@ -47,6 +47,12 @@
                     android:id="@+id/estado"
                     android:layout_gravity="center"/>
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/buscar"
+                android:hint="Buscar: resultados en ficha todas" />
+
             <TabWidget
                     android:id="@android:id/tabs"
                     android:layout_width="fill_parent"

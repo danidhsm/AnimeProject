@@ -46,6 +46,20 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
         public TextView episodes;
         public Button add;
         public ImageView imagen;
+
+        public static ViewHolder generate(View rowView){
+            ViewHolder viewHolder = new ViewHolder();
+
+            viewHolder.imagen           = (ImageView) rowView.findViewById(R.id.imageSerie);
+            viewHolder.nombre           = (TextView) rowView.findViewById(R.id.nameSerie);
+            viewHolder.currentEpisode   = (TextView) rowView.findViewById(R.id.currentEpisode);
+            viewHolder.episodes         = (TextView) rowView.findViewById(R.id.episodes);
+            viewHolder.add              = (Button) rowView.findViewById(R.id.plus);
+
+            return viewHolder;
+        }
+
+
     }
 
     public AnimeRowAdapter(Context context, ArrayList<Tipo> series) {
@@ -72,28 +86,6 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
         }*/
     }
 
-    /*public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemCache(key) == null) {
-            mMemoryCache.put(key, bitmap);
-        }
-    }
-
-    public Bitmap getBitmapFromMemCache(String key) {
-        return mMemoryCache.get(key);
-    }
-
-    public void loadBitmap(String key, ImageView mImageView) {
-
-        final Bitmap bitmap = getBitmapFromMemCache(key);
-        if (bitmap != null) {
-            mImageView.setImageBitmap(bitmap);
-        } else {
-            mImageView.setImageResource(R.drawable.ic_launcher);
-            BitmapWorkerTask task = new BitmapWorkerTask(mImageView);
-            task.execute(resId);
-        }
-    }*/
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -106,13 +98,7 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             rowView = inflater.inflate(R.layout.anime_row, parent, false);
 
-            ViewHolder viewHolder = new ViewHolder();
-
-            viewHolder.imagen           = (ImageView) rowView.findViewById(R.id.imageSerie);
-            viewHolder.nombre           = (TextView) rowView.findViewById(R.id.nameSerie);
-            viewHolder.currentEpisode   = (TextView) rowView.findViewById(R.id.currentEpisode);
-            viewHolder.episodes         = (TextView) rowView.findViewById(R.id.episodes);
-            viewHolder.add              = (Button) rowView.findViewById(R.id.plus);
+            ViewHolder viewHolder = ViewHolder.generate(rowView);
 
             rowView.setTag(viewHolder);
         }
@@ -121,8 +107,10 @@ public class AnimeRowAdapter extends ArrayAdapter<Tipo> {
 
 
         if(serie.getUrlImage()!=null && serie.getImageBitmap()==null){
-            new DownloadImageTask(serie).execute(serie.getUrlImage());
-            //Log.e("row","se ha iniciado el hilo de la imagen");
+            if(((MainActivity)context).isOnline()){
+                new DownloadImageTask(serie).execute(serie.getUrlImage());
+                //Log.e("row","se ha iniciado el hilo de la imagen");
+            }
         }else if (serie.getUrlImage()==null && serie.getImageBitmap()==null){
             holder.imagen.setImageResource(R.drawable.ic_launcher);
         } else {

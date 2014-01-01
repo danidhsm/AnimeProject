@@ -113,25 +113,28 @@ public class SerieLoader {
             String fname = Uri.encode(tipo.getTitle())+".jpg";
             final File file = new File (myDir, fname);
             if(!file.exists() || tipo.getAnio()==0 || tipo.getEpisodes()==0){
-                //new NetworkTask(tipo).execute("http://myanimelist.net/api/anime/search.xml?q="+ Uri.encode(tipo.getTitle()));
-                int modes[]= new int[3];
-                if(!file.exists()){
-                    modes[0]=NetworkTask.IMAGE_MODE;
-                } else {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tipo.setImageBitmap(decodeSampledBitmapFromResource(file.getAbsolutePath(),120,120));
-                        }
-                    }).start();
+
+                if(((MainActivity)context).isOnline()){
+                    //new NetworkTask(tipo).execute("http://myanimelist.net/api/anime/search.xml?q="+ Uri.encode(tipo.getTitle()));
+                    int modes[]= new int[3];
+                    if(!file.exists()){
+                        modes[0]=NetworkTask.IMAGE_MODE;
+                    } else {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                tipo.setImageBitmap(decodeSampledBitmapFromResource(file.getAbsolutePath(),120,120));
+                            }
+                        }).start();
+                    }
+                    if(tipo.getAnio()==0){
+                        modes[1]=NetworkTask.YEAR_MODE;
+                    }
+                    if(tipo.getEpisodes()==0){
+                        modes[2]=NetworkTask.EPISODES_MODE;
+                    }
+                    SerieLoader.getURLData(tipo,modes);
                 }
-                if(tipo.getAnio()==0){
-                    modes[1]=NetworkTask.YEAR_MODE;
-                }
-                if(tipo.getEpisodes()==0){
-                    modes[2]=NetworkTask.EPISODES_MODE;
-                }
-                SerieLoader.getURLData(tipo,modes);
 
             } else {
                 new Thread(new Runnable() {
@@ -150,6 +153,7 @@ public class SerieLoader {
         new NetworkTask(tipo,modes).execute("http://myanimelist.net/api/anime/search.xml?q="+ Uri.encode(tipo.getTitle()));
     }
 
+    /*creo que no se usa esta*/
     public static void getURLData(Tipo tipo){
         new NetworkTask(tipo).execute("http://myanimelist.net/api/anime/search.xml?q="+ Uri.encode(tipo.getTitle()));
     }
@@ -316,7 +320,7 @@ public class SerieLoader {
                 }
 
             } catch (IOException e) {
-                Log.e("", "url no valida");
+                Log.e("", "no se puede conectar");
             }
             return actualizar;
         }
