@@ -26,11 +26,14 @@ import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -51,8 +54,7 @@ public class MainActivity extends Activity implements Observer {
     /*@Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        //setContentView(R.layout.activity_main);
-    }NO FUNCIONA, SE SIGUE PINTANDO AL CAMBIAR LA ORINETACION*/
+    }//NO FUNCIONA, SE SIGUE PINTANDO AL CAMBIAR LA ORINETACION*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,12 +279,29 @@ public class MainActivity extends Activity implements Observer {
             InputStream input=null;
 
             try{
+                Log.i("Ficheros", "buscando fichero en memoria interna");
                 input = openFileInput("series.txt");
             } catch (FileNotFoundException e){
-                Toast toast = Toast.makeText(MainActivity.this, "no se ha encontrado el archivo interno", Toast.LENGTH_SHORT);
-                toast.show();
-                cancel(true);
+                Log.e("Ficheros", "Error al leer fichero de memoria interna");
+
+                try
+                {
+                    Log.i("Ficheros", "buscando fichero en memoria SD");
+                    File ruta_sd = Environment.getExternalStorageDirectory();
+
+                    File f = new File(ruta_sd.getAbsolutePath(), "series.txt");
+
+                    input=new FileInputStream(f);
+                }
+                catch (FileNotFoundException e2)
+                {
+                    Log.e("Ficheros", "Error al leer fichero de tarjeta SD");
+
+                    cancel(true);
+                }
             }
+
+            Log.i("Ficheros", "leer fichero...");
 
             ArrayList<Tipo> series = new ArrayList<Tipo>();
             try {
@@ -362,14 +381,11 @@ public class MainActivity extends Activity implements Observer {
 
                     todas=MainActivity.this.almacen.getAll();
 
-
-
-
                     for (int j = 0; j < todas.size(); j++)
                     {
                         if (textlength <= todas.get(j).getTitle().length())
                         {
-                            if (buscar.getText().toString().equalsIgnoreCase((String) todas.get(j).getTitle().subSequence(0, textlength)))
+                            if ((todas.get(j).getTitle()+todas.get(j).getEpisodes()).contains(buscar.getText()))
                             {
                                 filtro.add(todas.get(j));
                             }
