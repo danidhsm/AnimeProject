@@ -1,7 +1,5 @@
 package com.danidhsm.anime;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -154,5 +152,25 @@ public class Almacen extends Observable implements Observer {
         Collections.sort(this.series, new YearComparator());
     }
 
+    class diffComparator implements Comparator<Tipo>{
+
+        @Override
+        public int compare(Tipo tipo, Tipo tipo2) {
+
+            int diff1=tipo.getEpisodes()-tipo.getCurrentEpisode();
+            int diff2= tipo2.getEpisodes()-tipo2.getCurrentEpisode();
+
+            if(diff2<diff1){
+                return 1;
+            } else if(diff1==diff2){
+                return 0;
+            } else return -1;
+
+        }
+    }
+
+    public void  diffSort(){
+        Collections.sort(this.series, new diffComparator());
+    }
 
 }

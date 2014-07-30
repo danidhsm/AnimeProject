@@ -2,6 +2,9 @@ package com.danidhsm.anime;
 
 import android.graphics.Bitmap;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -146,6 +149,28 @@ public class Tipo extends Observable {
 	public String toString(){
 		return this.title+"["+this.currentEpisode+"/"+((this.episodes==0)?"??":this.episodes)+"]"+" "+this.anio+" "+this.estado.name()+" "+this.generos+" "+new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(this.date)+" "+this.day;
 	}
+
+    public String toJSON(){
+
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("title", this.title);
+            jsonObject.put("episodes", this.episodes);
+            jsonObject.put("currentEpisode", this.currentEpisode);
+            jsonObject.put("year", this.anio);
+            jsonObject.put("genders", this.generos);
+            jsonObject.put("updated_at", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(this.date));
+            jsonObject.put("newEpisodeDay", this.day);
+            //jsonObject.put("rank", this.rank);
+
+
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
+    }
 
 	public void addEpisode(){
 		this.currentEpisode++;

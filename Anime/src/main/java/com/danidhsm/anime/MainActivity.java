@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -24,16 +23,12 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -122,18 +117,6 @@ public class MainActivity extends Activity implements Observer {
         this.listviewQuiero_ver=null;
         this.listviewTodas=null;
     }
-
-    /*private void unbindDrawables(View view) {
-        if (view.getBackground() != null) {
-            view.getBackground().setCallback(null);
-        }
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                unbindDrawables(((ViewGroup) view).getChildAt(i));
-            }
-            ((ViewGroup) view).removeAllViews();
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -376,21 +359,47 @@ public class MainActivity extends Activity implements Observer {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
                     int textlength = buscar.getText().length();
+                    String buscarStr = buscar.getText().toString();
+
                     ArrayList<Tipo> filtro = new ArrayList<Tipo>();
                     ArrayList<Tipo> todas;
 
                     todas=MainActivity.this.almacen.getAll();
 
-                    for (int j = 0; j < todas.size(); j++)
-                    {
-                        if (textlength <= todas.get(j).getTitle().length())
-                        {
-                            if ((todas.get(j).getTitle()+todas.get(j).getEpisodes()).contains(buscar.getText()))
-                            {
-                                filtro.add(todas.get(j));
+                    boolean diferenciaCapitulos=false;
+                    boolean nCapitulos=false;
+
+                    diferenciaCapitulos = buscarStr.contains("diff:");
+                    nCapitulos = buscarStr.contains("caps:");
+
+                    /*if(diferenciaCapitulos) {
+                        Log.v("buscador","tiene diff");
+                        Pattern p = Pattern.compile("(\\w+(?:\\s+\\w+)*)((?:\\s+:(?:diff|caps)(?:=(?:.+))?)*)");
+                        Matcher m = p.matcher(buscarStr);
+                        if (m.matches()) {
+                            buscarStr = m.group(1);
+                            buscarStr += m.group(3);
+                        }
+                    }*/
+
+                    if(!diferenciaCapitulos) {
+                        for (Tipo serie : todas) {
+                            if (textlength <= serie.getTitle().length()) {
+                                if ((serie.getTitle() + " caps:" + serie.getEpisodes()).contains(buscar.getText())) {
+                                    filtro.add(serie);
+                                }
                             }
                         }
+                    } else {
+
+                        filtro= MainActivity.this.almacen.getViendo();
+                        filtro.addAll(MainActivity.this.almacen.getQuieroVer());
+
+                        Almacen alm = new Almacen(filtro);
+                        alm.diffSort();
+                        filtro = alm.getAll();
                     }
+
 
                     listviewTodas.setAdapter(new AnimeRowAdapter(MainActivity.this,filtro));
                 }

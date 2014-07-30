@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditSerieActivity"/>
+        <activity android:name=".EditSerieActivity" android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
